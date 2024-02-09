@@ -1,0 +1,58 @@
+
+CREATE TABLE Users (
+    UserID INT AUTO_INCREMENT PRIMARY KEY,
+    Username VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) UNIQUE NOT NULL,
+    Password VARCHAR(100) NOT NULL,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE Posts (
+    PostID INT AUTO_INCREMENT PRIMARY KEY,
+    UserID INT,
+    Title VARCHAR(100) NOT NULL,
+    Content TEXT NOT NULL,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+CREATE TABLE Tags (
+    TagID INT AUTO_INCREMENT PRIMARY KEY,
+    TagName VARCHAR(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE Post_Tags (
+    PostID INT,
+    TagID INT,
+    PRIMARY KEY (PostID, TagID),
+    FOREIGN KEY (PostID) REFERENCES Posts(PostID),
+    FOREIGN KEY (TagID) REFERENCES Tags(TagID)
+);
+
+CREATE TABLE Comments (
+    CommentID INT AUTO_INCREMENT PRIMARY KEY,
+    PostID INT,
+    UserID INT,
+    Comment TEXT NOT NULL,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (PostID) REFERENCES Posts(PostID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+CREATE TABLE Views (
+    ViewID INT AUTO_INCREMENT PRIMARY KEY,
+    PostID INT,
+    UserID INT,
+    ViewedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (PostID) REFERENCES Posts(PostID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+CREATE INDEX idx_posts_userid ON Posts(UserID);
+CREATE INDEX idx_posttags_postid ON Post_Tags(PostID);
+CREATE INDEX idx_posttags_tagid ON Post_Tags(TagID);
+CREATE INDEX idx_comments_postid ON Comments(PostID);
+CREATE INDEX idx_comments_userid ON Comments(UserID);
+CREATE INDEX idx_views_postid ON Views(PostID);
+CREATE INDEX idx_views_userid ON Views(UserID);
