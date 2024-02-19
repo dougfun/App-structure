@@ -8,6 +8,7 @@ import Sidebar from "@/components/ui/sidebar";
 import { useEffect, useState } from "react";
 
 const MobileSidebar = () => {
+    // This is one way of fixing components which are causing hydrations error the way they are rendered
     const [isMounted, SetIsMounted] = useState(false);
 
     useEffect(() => {
